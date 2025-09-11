@@ -1,0 +1,86 @@
+body{
+    background-color: #31452c;
+    
+}
+footer{
+    background-color: #e3cc98;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    color: #411d04;
+
+}
+
+button {
+    margin-top: 10px;
+    padding: 0.6em 1em;
+    border: 4px solid #411d04;
+    transition: ease-in-out 0.3s;
+    background-color: transparent;
+    color: #411d04;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+button:hover {
+    transform: scale(1.2) rotate(10deg);
+    background-color: #411d04;
+    color: white;
+}
+
+
+.title {
+    color: white;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 620px;
+    font-size: 60px;
+    font-style: normal;
+}
+p{
+    color:#91a28d; 
+    font-size: 20px;
+}
+
+
+.my-container{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 0.1fr 2fr;
+    padding: 20px;
+    align-content: center;
+    gap: 5px;
+}
+
+
+.order-div{
+    background-color: #e3cc98;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-image{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.container-rows{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px;
+}
+img{
+    vertical-align: bottom;
+}
+
+table{
+    background-color: #e3cc98;
+    margin-left: 10px;
+    
+}
+
+th{
+    background-color: #411d04;
+    color: white;
+}
