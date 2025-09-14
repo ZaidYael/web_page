@@ -1,9 +1,9 @@
 body{
-    background-color: #31452c;
+    background-color: #181717;
     
 }
 footer{
-    background-color: #e3cc98;
+    background-color: #CDC392;
     width: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -17,16 +17,16 @@ button {
     padding: 0.6em 1em;
     border: 4px solid #411d04;
     transition: ease-in-out 0.3s;
-    background-color: transparent;
-    color: #411d04;
+    background-color: #181717;
+    color: #FFF;
     font-weight: bolder;
     font-size: 20px;
 }
 
 button:hover {
     transform: scale(1.2) rotate(10deg);
-    background-color: #411d04;
-    color: white;
+    background-color: #52796F;
+    color: #843B62;
 }
 
 
@@ -55,7 +55,7 @@ p{
 
 
 .order-div{
-    background-color: #e3cc98;
+    background-color: #CDC392;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
