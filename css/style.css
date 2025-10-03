@@ -9,12 +9,15 @@ body {
     box-sizing: border-box;
     font-family: 'Montserrat', "Rubik", sans-serif;
     background-color: #181717;
+    display: flex;
+    flex-direction: column;
+}
+
+body.body-main {
     background-image: url(../images/pexels-hikaique-233315.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    display: flex;
-    flex-direction: column;
 }
 
 html, body {
