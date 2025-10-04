@@ -7,25 +7,55 @@
     <link href="form.css" rel="stylesheet" />
 </head>
 <body>
-        <form method="post" class="formulario">
+        <form method="post" class="formulario" id="registroForm">
             <h1>Registro para Suscripción</h1>
             <div class="text">
-                <input type="text" required>
+                <input type="text" required id="nombre">
                 <label>Nombre (s)</label>
             </div>
             <div class="text">
-                <input type="text" required>
+                <input type="text" required id="apellido">
                 <label>Apellido (s)</label>
             </div>
             <div class="text">
-                <input type="email" required>
+                <input type="email" required id="correo">
                 <label>Correo</label>
             </div>
             <div class="text"> 
-                <input type="tel" required>
+                <input type="tel" required id="telefono">
                 <label>Teléfono</label>
             </div>
             <input type="submit" value="Registrar">
         </form>
+        <script>
+            document.getElementById('registroForm').addEventListener('submit', function(e) {
+                const nombre = document.getElementById('nombre').value.trim();
+                const apellido = document.getElementById('apellido').value.trim();
+                const correo = document.getElementById('correo').value.trim();
+                const telefono = document.getElementById('telefono').value.trim();
+
+                let mensaje = "";
+
+                if (nombre.length < 2) {
+                    mensaje += "El nombre debe tener al menos 2 caracteres.\n";
+                }
+                if (apellido.length < 2) {
+                    mensaje += "El apellido debe tener al menos 2 caracteres.\n";
+                }
+                const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!correoRegex.test(correo)) {
+                    mensaje += "El correo no es válido.\n";
+                }
+                const telRegex = /^\d{10}$/;
+                if (!telRegex.test(telefono)) {
+                    mensaje += "El teléfono debe tener 10 dígitos numéricos.\n";
+                }
+
+                if (mensaje) {
+                    alert(mensaje);
+                    e.preventDefault();
+                }
+            });
+        </script>
 </body>
 </html>
