@@ -5,57 +5,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
     <link href="form.css" rel="stylesheet" />
+    <style>
+        /* Estilos básicos para mostrar errores en el formulario */
+        .error { 
+            color: red; 
+            font-size: 0.9em; 
+            margin-top: -10px; 
+            margin-bottom: 10px; 
+            display: block; 
+        }
+    </style>
 </head>
 <body>
-        <form method="post" class="formulario" id="registroForm">
-            <h1>Registro para Suscripción</h1>
-            <div class="text">
-                <input type="text" required id="nombre">
-                <label>Nombre (s)</label>
-            </div>
-            <div class="text">
-                <input type="text" required id="apellido">
-                <label>Apellido (s)</label>
-            </div>
-            <div class="text">
-                <input type="email" required id="correo">
-                <label>Correo</label>
-            </div>
-            <div class="text"> 
-                <input type="tel" required id="telefono">
-                <label>Teléfono</label>
-            </div>
-            <input type="submit" value="Registrar">
-        </form>
-        <script>
-            document.getElementById('registroForm').addEventListener('submit', function(e) {
-                const nombre = document.getElementById('nombre').value.trim();
-                const apellido = document.getElementById('apellido').value.trim();
-                const correo = document.getElementById('correo').value.trim();
-                const telefono = document.getElementById('telefono').value.trim();
 
-                let mensaje = "";
+<?php
+// ===============================================
+// INICIO DE LA LÓGICA DE VALIDACIÓN DEL SERVIDOR (PHP)
+// ===============================================
 
-                if (nombre.length < 2) {
-                    mensaje += "El nombre debe tener al menos 2 caracteres.\n";
-                }
-                if (apellido.length < 2) {
-                    mensaje += "El apellido debe tener al menos 2 caracteres.\n";
-                }
-                const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!correoRegex.test(correo)) {
-                    mensaje += "El correo no es válido.\n";
-                }
-                const telRegex = /^\d{10}$/;
-                if (!telRegex.test(telefono)) {
-                    mensaje += "El teléfono debe tener 10 dígitos numéricos.\n";
-                }
+// Inicialización de variables de datos y contenedores de errores
+$nombre = $apellido = $correo = $telefono = "";
+$errores = [];          // Array asociativo para almacenar los errores de validación
+$mensaje_exito = "";    // Mensaje a mostrar si el registro es exitoso
 
-                if (mensaje) {
-                    alert(mensaje);
-                    e.preventDefault();
-                }
-            });
-        </script>
+/**
+ * Función para limpiar y sanear los datos de entrada
+ * Esto es crucial para la seguridad (prevención de XSS)
+ * @param string $data El valor del campo del formulario
+ * @return string El valor sanitizado
+ */
+function test_input($data) {
+    $data = trim($data);        // Elimina espacios en blanco al inicio y al final
+    $data = stripslashes($data); // Elimina las barras invertidas
+    $data = htmlspecialchars($data); // Convierte caracteres especiales a entidades HTML
+    return $data;
+}
+
+
+// Comprueba si el formulario fue enviado a través del método POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // --- 1. Validación de Nombre (s) ---
+    if (empty($_POST["nombre"])) {
+        $errores["nombre"] = "El nombre es obligatorio.";
+    } else {
+        $nombre = test_input($_POST["nombre"]);
+        // Comprueba si el nombre contiene solo letras, acentos, ñ, y tiene al menos 2 caracteres
+        if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}$/", $nombre)) {
+            $errores["nombre"] = "Solo se permiten letras y espacios, y debe tener al menos 2 caracteres.";
+        }
+    }
+
+    // --- 2. Validación de Apellido (s) ---
+    if (empty($_POST["apellido"])) {
+        $errores["apellido"] = "El apellido es obligatorio.";
+    } else {
+        $apellido = test_input($_POST["apellido"]);
+        // Comprueba si el apellido contiene solo letras, acentos, ñ, y tiene al menos 2 caracteres
+        if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}$/", $apellido)) {
+            $errores["apellido"] = "Solo se permiten letras y espacios, y debe tener al menos 2 caracteres.";
+        }
+    }
+
+    // --- 3. Validación de Correo ---
+    if (empty($_POST["correo"])) {
+        $errores["correo"] = "El correo es obligatorio.";
+    } else {
+        $correo = test_input($_POST["correo"]);
+        // Comprueba si el formato del correo es válido usando la función nativa de PHP
+        if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            $errores["correo"] = "El formato de correo no es válido.";
+        }
+    }
+
+    // --- 4. Validación de Teléfono ---
+    if (empty($_POST["telefono"])) {
+        $errores["telefono"] = "El teléfono es obligatorio.";
+    } else {
+        $telefono = test_input($_POST["telefono"]);
+        // Comprueba si el teléfono tiene exactamente 10 dígitos numéricos
+        if (!preg_match("/^\d{10}$/", $telefono)) {
+            $errores["telefono"] = "El teléfono debe tener 10 dígitos numéricos.";
+        }
+    }
+
+    // --- 5. Procesamiento Final ---
+    // Si el array de errores está vacío, la validación fue exitosa
+    if (empty($errores)) {
+        // *** Aquí se ejecutaría la lógica de negocio (ej. guardar en DB, enviar email) ***
+
+        // Mensaje de éxito al usuario
+        $mensaje_exito = "¡Registro exitoso! Gracias por suscribirte.";
+        
+        // Se limpian los campos del formulario para un nuevo registro
+        $nombre = $apellido = $correo = $telefono = "";
+    }
+}
+
+// ===============================================
+// FIN DE LA LÓGICA DE VALIDACIÓN DEL SERVIDOR (PHP)
+// ===============================================
+?>
+
+    <?php if ($mensaje_exito): ?>
+        <p style="color: green; font-weight: bold; text-align: center;"><?php echo $mensaje_exito; ?></p>
+    <?php endif; ?>
+
+    <form method="post" class="formulario" id="registroForm" action="../web_page/"; ?>
+        <h1>Registro para Suscripción</h1>
+        
+        <div class="text">
+            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
+            <label>Nombre (s)</label>
+        </div>
+        <?php if (isset($errores["nombre"])): ?><span class="error"><?php echo $errores["nombre"]; ?></span><?php endif; ?>
+
+        <div class="text">
+            <input type="text" id="apellido" name="apellido" value="<?php echo htmlspecialchars($apellido); ?>">
+            <label>Apellido (s)</label>
+        </div>
+        <?php if (isset($errores["apellido"])): ?><span class="error"><?php echo $errores["apellido"]; ?></span><?php endif; ?>
+
+        <div class="text">
+            <input type="email" id="correo" name="correo" value="<?php echo htmlspecialchars($correo); ?>">
+            <label>Correo</label>
+        </div>
+        <?php if (isset($errores["correo"])): ?><span class="error"><?php echo $errores["correo"]; ?></span><?php endif; ?>
+
+        <div class="text"> 
+            <input type="tel" id="telefono" name="telefono" value="<?php echo htmlspecialchars($telefono); ?>">
+            <label>Teléfono</label>
+        </div>
+        <?php if (isset($errores["telefono"])): ?><span class="error"><?php echo $errores["telefono"]; ?></span><?php endif; ?>
+
+        <input type="submit" value="Registrar">
+        
+    </form>
+    
+    <script>
+        // Añade un 'listener' al evento de envío del formulario
+        document.getElementById('registroForm').addEventListener('submit', function(e) {
+            
+            // 1. Obtiene los valores de los campos y elimina espacios en blanco
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellido = document.getElementById('apellido').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+
+            let mensaje = ""; // Inicializa el contenedor de mensajes de error
+
+            // 2. Validación de Nombre
+            if (nombre.length < 2) {
+                mensaje += "El nombre debe tener al menos 2 caracteres.\n";
+            }
+            // 3. Validación de Apellido
+            if (apellido.length < 2) {
+                mensaje += "El apellido debe tener al menos 2 caracteres.\n";
+            }
+            // 4. Validación de Correo (usando Expresión Regular)
+            const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!correoRegex.test(correo)) {
+                mensaje += "El correo no es válido.\n";
+            }
+            // 5. Validación de Teléfono (usando Expresión Regular: 10 dígitos)
+            const telRegex = /^\d{10}$/;
+            if (!telRegex.test(telefono)) {
+                mensaje += "El teléfono debe tener 10 dígitos numéricos.\n";
+            }
+
+            // 6. Detener el envío si hay errores
+            if (mensaje) {
+                alert("Validación del cliente:\n" + mensaje);
+                // Si se descomenta la siguiente línea, el formulario NO se enviará al servidor
+                // e.preventDefault(); 
+            }
+        });
+    </script>
 </body>
 </html>
