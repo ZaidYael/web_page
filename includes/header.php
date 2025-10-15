@@ -14,8 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet"/>
 </head>
-<body class="<?php echo $class; ?>">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<body class="<?php echo $class; ?>" style="padding-top: 70px;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/web_page/index.php">
                 <img src="images/logo_kst.jpeg" alt="logo_kst" class="logo" style="height: 60px;">
